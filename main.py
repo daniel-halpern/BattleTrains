@@ -1,4 +1,6 @@
-from helpers import *
+#from helpers import *
+from drawingHelpers import *
+from otherHelpers import *
 from player import *
 from button import *
 from computer import *
