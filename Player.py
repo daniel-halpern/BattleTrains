@@ -8,18 +8,31 @@ class Player:
         self.pieceBoard = board(app)
     
     def topBoardPressed(self, app, x, y, atTop):
-        pass
+        if app.screen == 'game':
+            row, col = getCell(app, x, y, atTop)
+            print(row, col)
+            if app.computer.pieceBoard.grid[row][col]:
+                print("HIT")
+                self.guessBoard.grid[row][col] = True
+            else:
+                print("MISS")
+                self.guessBoard.grid[row][col] = False
+
     def bottomBoardPressed(self, app, x, y, atTop):
         if app.screen == 'boardCreation':
             row, col = getCell(app, x, y, atTop)
-            self.pieceBoard.grid[row][col] = not self.pieceBoard.grid[row][col]
+            if self.piecesPlaced == app.pieces:
+                if self.pieceBoard.grid[row][col]:
+                    self.pieceBoard.grid[row][col] = not self.pieceBoard.grid[row][col]
+            else:
+                self.pieceBoard.grid[row][col] = not self.pieceBoard.grid[row][col]
             self.piecesPlaced = self.updatePiecesPlacedCount(app)
     
     def updatePiecesPlacedCount(self, app):
         count = 0
         for row in range(app.size):
             for col in range(app.size):
-                if self.pieceBoard.grid[row][col] == True:
+                if self.pieceBoard.grid[row][col]:
                     count += 1
         return count
             

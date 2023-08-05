@@ -12,11 +12,17 @@ class Button:
     def drawButton(self, app):
         drawRect(self.x, self.y, self.width, self.height, 
                  fill=self.color, border='black', align = 'center')
-        drawLabel(self.text, self.x, self.y, size = 20)
+        drawLabel(self.text, self.x, self.y, size = self.height/2)
         
     def doCommand(self, app):
         if self.command == 'play':
             app.screen = 'boardCreation'
+        elif self.command == 'settings':
+            app.screen = 'settings'
+        elif self.command == 'instructions':
+            print("instruct")
+            app.screen = 'instructions'
+            print(app.screen)
         elif self.command == 'start':
-            app.screen = 'game'
-
+            if app.player.piecesPlaced == app.pieces:
+                app.screen = 'game'

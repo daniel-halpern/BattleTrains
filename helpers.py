@@ -1,6 +1,7 @@
 from cmu_graphics import *
 from player import *
 from button import *
+from computer import *
 
 def restart(app):
     app.trainCars = 10
@@ -10,21 +11,28 @@ def restart(app):
     app.boardSize = (app.height // 2) - (app.boardMargin * 3)
     app.cellBorderWidth = 2
     app.player = Player(app)
-    app.computer = Player(app)
+    app.computer = Computer(app)
     app.topTextHeight = 100
     app.screen = 'start'
-    # Screen states: start, boardCreation, game, win, lose, instructions
+    app.yourTurn = True
+    app.showSolution = False
     initializeButtons(app)
     
 def initializeButtons(app):
     # Start screen buttons
-    playButton = Button('Play', app.width / 2, app.height / 2, 100, 50, 'lime', 
-                        'play')
-    app.startButtonList = [playButton]
+    playButton = Button('Play', app.width / 2, app.height / 4, app.width / 2, 
+                        app.height / 10, 'lime', 'play')
+    settingsButton = Button('Settings', app.width / 2, 3 * app.height / 8, 
+                            app.width / 2, app.height / 10, 'gray', 'settings')
+    instructionsButton = Button('Instructions', app.width / 2, app.height / 2, 
+                                app.width / 2, app.height / 10, 'gray', 
+                                'instructions')
+    app.startButtonList = [playButton, settingsButton, instructionsButton]
     # Board creation screen buttons
     startButton = Button('Start', app.height / 2, app.width - app.boardMargin, 
                          100, 50, 'lime', 'start')
     app.boardCreationButtonList = [startButton]
+    app.gameButtonList = []
 
 ## Mouse press related functions ##
 def checkButtonPressed(app, button, mouseX, mouseY):
@@ -56,11 +64,25 @@ def drawStartScreen(app):
     for button in app.startButtonList:
         Button.drawButton(button, app)
 
+## Draw the game in progress screen ##
+
+def drawGameScreen(app):
+    if app.yourTurn:
+        drawLabel('Your Turn', app.width / 2, app.boardMargin * 2, size = 69)
+    else:
+        drawLabel("Computer's turn", app.width / 2, app.boardMargin * 2, 
+                  size = 69)
+    drawBoard(app, app.computer.pieceBoard.grid, atTop=True)
+    drawBoard(app, app.player.pieceBoard.grid, atTop=False)
+    drawBoard(app, app.player.guessBoard.grid, atTop=True)
+    for button in app.gameButtonList:
+        Button.drawButton(button, app)
+
 ## Draw the board creation screen ##
 def drawBoardCreation(app):
     drawLabel('Create your board', app.width / 2, app.boardMargin * 2, 
               size = 50)
-    drawBoard(app, app.player.guessBoard.grid, atTop=True)
+    drawBoard(app, app.computer.pieceBoard.grid, atTop=True)
     drawBoard(app, app.player.pieceBoard.grid, atTop=False)
     for button in app.boardCreationButtonList:
         if button.command == 'start':
@@ -89,10 +111,18 @@ def drawBoard(app, grid, atTop):
 # Draws each indiviual cell
 def drawCell(app, grid, row, col, atTop):
     cellLeft, cellTop, cellSize = getCellLeftTop(app, row, col, atTop)
-    if grid[row][col] == True:
+    if atTop and app.showSolution and grid[row][col]:
+        color = 'red'
+        if app.player.guessBoard.grid[row][col]:
+            color = 'lime'
+    elif atTop and grid[row][col] and app.player.guessBoard.grid[row][col]:
+        color = 'lime'
+    elif atTop == False and grid[row][col]:
         color = 'red'
     else:
         color = None
+        if atTop and app.player.guessBoard.grid[row][col] == False:
+            color = 'blue'
     drawRect(cellLeft, cellTop, cellSize, cellSize,
              fill=color, border='black',
              borderWidth=app.cellBorderWidth)
@@ -100,7 +130,7 @@ def drawCell(app, grid, row, col, atTop):
 # Gets the x and y position for each cell given a row and column
 def getCellLeftTop(app, row, col, atTop):
     cellSize = app.boardSize / app.size
-    if atTop == True:
+    if atTop:
         cellTop = app.boardMargin + (row * cellSize)
     else:
         cellTop = 2 * app.boardMargin + (row * cellSize) + app.boardSize
