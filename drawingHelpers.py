@@ -22,6 +22,21 @@ def drawGameScreen(app):
     drawBoard(app, app.player.guessBoard.grid, atTop=True)
     for button in app.gameButtonList:
         Button.drawButton(button, app)
+    # Draw time elapsed
+    drawLabel('Time elapsed:', app.midX, 2 * app.boardMargin + 
+              app.topTextHeight, size = 20)
+    if (app.steps // 60) % 60 // 10 == 0:
+        drawLabel(f'{app.steps // 60 // 60}:0{app.steps // 60 % 60}', app.midX,
+                  2 * app.boardMargin + app.topTextHeight + 50, size = 50)
+    else:
+        drawLabel(f'{app.steps // 60 // 60}:{app.steps // 60 % 60}', app.midX,
+                  2 * app.boardMargin + app.topTextHeight + 50, size = 50)
+    # Draw pieces left
+    drawLabel('Pieces left', app.midX, 6 * app.boardMargin + app.topTextHeight, 
+              size = 20)
+    drawLabel(app.piecesLeft, app.midX, 6 * app.boardMargin + app.topTextHeight 
+              + 50, size = 50)
+
 
 ## Draw the board creation screen ##
 def drawBoardCreation(app):
@@ -36,6 +51,11 @@ def drawBoardCreation(app):
             else:
                 button.color = 'lime'
         Button.drawButton(button, app)
+    # Draw pieces left
+    drawLabel('Pieces left', app.midX, 6 * app.boardMargin + app.topTextHeight, 
+              size = 20)
+    drawLabel(app.pieces - app.player.piecesPlaced, app.midX, 6 * 
+              app.boardMargin + app.topTextHeight + 50, size = 50)
 
 ## Draw the board ##
 def drawBoard(app, grid, atTop):

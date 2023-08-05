@@ -22,6 +22,15 @@ class Computer(Player):
         app.unPauseTime = app.steps + random.randrange(25, 50)
         app.paused = True
         app.yourTurn = False
+
+    def getPiecesLeft(self, app):
+            count = 0
+            for row in range(app.size):
+                for col in range(app.size):
+                    if (self.guessBoard.grid[row][col] and 
+                        app.player.pieceBoard.grid[row][col]):
+                        count += 1
+            return count
         
 
 # Randomly places the pieces for a user

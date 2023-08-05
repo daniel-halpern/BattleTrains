@@ -18,7 +18,11 @@ def restart(app):
     app.showSolution = False
     app.paused = False
     app.steps = 0
+    app.stepsPerSecond = 120
     app.unPauseTime = 0
+    app.sideGapWidth = app.width - 3 * app.boardMargin - app.boardSize
+    app.midX = app.width - (app.sideGapWidth / 2) - app.boardMargin
+    app.piecesLeft = app.pieces
     initializeButtons(app)
     
 def initializeButtons(app):
@@ -32,9 +36,10 @@ def initializeButtons(app):
                                 'instructions')
     app.startButtonList = [playButton, settingsButton, instructionsButton]
     # Board creation screen buttons
-    startButton = Button('Start', app.height / 2, app.width - app.boardMargin, 
-                         100, 50, 'lime', 'start')
+    startButton = Button('Start', app.midX, app.height / 2, 
+                         app.sideGapWidth, 60, 'lime', 'start')
     app.boardCreationButtonList = [startButton]
+    # Game screen buttons
     app.gameButtonList = []
 
 ## Mouse press related functions ##
@@ -58,3 +63,11 @@ def checkGridPressed(app, mouseX, mouseY):
         return True, False
     else:
         return False, 
+
+def checkForWin(app):
+    if app.piecesLeft == 0:
+        print("you win")
+        restart(app)
+    elif app.computer.getPiecesLeft(app) == app.pieces:
+        print("you lose")
+        restart(app)

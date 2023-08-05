@@ -14,6 +14,7 @@ class Player:
                 print("already guessed there")
             elif app.computer.pieceBoard.grid[row][col]:
                 print("HIT")
+                app.piecesLeft -= 1
                 self.guessBoard.grid[row][col] = True
                 app.computer.computerMakeMove(app)
             else:
@@ -26,9 +27,11 @@ class Player:
             row, col = getCell(app, x, y, atTop)
             if self.piecesPlaced == app.pieces:
                 if self.pieceBoard.grid[row][col]:
-                    self.pieceBoard.grid[row][col] = not self.pieceBoard.grid[row][col]
+                    self.pieceBoard.grid[row][col] = (not 
+                                                self.pieceBoard.grid[row][col])
             else:
-                self.pieceBoard.grid[row][col] = not self.pieceBoard.grid[row][col]
+                self.pieceBoard.grid[row][col] = (not 
+                                                self.pieceBoard.grid[row][col])
             self.piecesPlaced = self.updatePiecesPlacedCount(app)
     
     def updatePiecesPlacedCount(self, app):

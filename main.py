@@ -1,4 +1,3 @@
-#from helpers import *
 from drawingHelpers import *
 from otherHelpers import *
 from player import *
@@ -9,12 +8,14 @@ def onAppStart(app):
     restart(app)
 
 def onStep(app):
-    app.steps += 1
-    # Adds a delay between player's guess and computer's guess
-    if app.steps == app.unPauseTime and app.paused:
-        app.computer.guess(app)
-        app.paused = False
-        app.yourTurn = True
+    checkForWin(app)
+    if app.screen == 'game':
+        app.steps += 1
+        # Adds a delay between player's guess and computer's guess
+        if app.steps == app.unPauseTime and app.paused:
+            app.computer.guess(app)
+            app.paused = False
+            app.yourTurn = True
 
 def onMousePress(app, mouseX, mouseY):
     if app.paused:
