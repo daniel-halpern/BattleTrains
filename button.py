@@ -22,7 +22,6 @@ class Button:
         elif self.command == 'instructions':
             print("instruct")
             app.screen = 'instructions'
-            print(app.screen)
         elif self.command == 'start':
             if app.player.piecesPlaced == app.pieces:
                 app.screen = 'game'

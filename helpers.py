@@ -16,6 +16,9 @@ def restart(app):
     app.screen = 'start'
     app.yourTurn = True
     app.showSolution = False
+    app.paused = False
+    app.steps = 0
+    app.unPauseTime = 0
     initializeButtons(app)
     
 def initializeButtons(app):
@@ -68,10 +71,10 @@ def drawStartScreen(app):
 
 def drawGameScreen(app):
     if app.yourTurn:
-        drawLabel('Your Turn', app.width / 2, app.boardMargin * 2, size = 69)
+        drawLabel('Your turn', app.width / 2, app.boardMargin * 2, size = 70)
     else:
         drawLabel("Computer's turn", app.width / 2, app.boardMargin * 2, 
-                  size = 69)
+                  size = 65)
     drawBoard(app, app.computer.pieceBoard.grid, atTop=True)
     drawBoard(app, app.player.pieceBoard.grid, atTop=False)
     drawBoard(app, app.player.guessBoard.grid, atTop=True)
@@ -107,10 +110,16 @@ def drawBoard(app, grid, atTop):
                  + app.boardSize, app.boardSize, app.boardSize,
                 fill=None, border='black', borderWidth=app.cellBorderWidth*2)
 
-
 # Draws each indiviual cell
 def drawCell(app, grid, row, col, atTop):
     cellLeft, cellTop, cellSize = getCellLeftTop(app, row, col, atTop)
+    color = getColor(app, grid, row, col, atTop)
+    drawRect(cellLeft, cellTop, cellSize, cellSize,
+             fill=color, border='black',
+             borderWidth=app.cellBorderWidth)
+
+# Gets what color that cell should be
+def getColor(app, grid, row, col, atTop):
     if atTop and app.showSolution and grid[row][col]:
         color = 'red'
         if app.player.guessBoard.grid[row][col]:
@@ -119,13 +128,15 @@ def drawCell(app, grid, row, col, atTop):
         color = 'lime'
     elif atTop == False and grid[row][col]:
         color = 'red'
+        if app.computer.guessBoard.grid[row][col]:
+            color = 'lime'
     else:
         color = None
         if atTop and app.player.guessBoard.grid[row][col] == False:
             color = 'blue'
-    drawRect(cellLeft, cellTop, cellSize, cellSize,
-             fill=color, border='black',
-             borderWidth=app.cellBorderWidth)
+        elif atTop == False and app.computer.guessBoard.grid[row][col] == False:
+            color = 'blue'
+    return color
 
 # Gets the x and y position for each cell given a row and column
 def getCellLeftTop(app, row, col, atTop):

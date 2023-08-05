@@ -7,9 +7,16 @@ def onAppStart(app):
     restart(app)
 
 def onStep(app):
-    pass
+    app.steps += 1
+    # Adds a delay between player's guess and computer's guess
+    if app.steps == app.unPauseTime and app.paused:
+        app.computer.guess(app)
+        app.paused = False
+        app.yourTurn = True
 
 def onMousePress(app, mouseX, mouseY):
+    if app.paused:
+        return
     # Start screen buttons
     if app.screen == 'start':
         for button in app.startButtonList:

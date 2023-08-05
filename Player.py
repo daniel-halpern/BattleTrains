@@ -10,12 +10,15 @@ class Player:
     def topBoardPressed(self, app, x, y, atTop):
         if app.screen == 'game':
             row, col = getCell(app, x, y, atTop)
-            print(row, col)
-            if app.computer.pieceBoard.grid[row][col]:
+            if app.player.guessBoard.grid[row][col] != None:
+                print("already guessed there")
+            elif app.computer.pieceBoard.grid[row][col]:
                 print("HIT")
                 self.guessBoard.grid[row][col] = True
+                app.computer.computerMakeMove(app)
             else:
                 print("MISS")
+                app.computer.computerMakeMove(app)
                 self.guessBoard.grid[row][col] = False
 
     def bottomBoardPressed(self, app, x, y, atTop):
