@@ -53,8 +53,6 @@ def onMousePress(app, mouseX, mouseY):
             for button in app.boardCreationButtonList:
                 checkButtonPressed(app, button, mouseX, mouseY)
 
-
-
 def onMouseRelease(app, mouseX, mouseY):
     pass
 

@@ -25,9 +25,9 @@ def restart(app):
     app.sideGapWidth = app.width - 3 * app.boardMargin - app.boardSize
     app.midX = app.width - (app.sideGapWidth / 2) - app.boardMargin
     app.piecesLeft = app.pieces
-    app.sideUrl = 'cmu://2294/175459/trainSide.png'
     initializeButtons(app)
-    
+
+# Makes all the button objects
 def initializeButtons(app):
     # Start screen buttons
     playButton = Button('Play', app.width / 2, app.height / 4, app.width / 2, 
@@ -46,13 +46,7 @@ def initializeButtons(app):
     app.gameButtonList = []
 
 ## Mouse press related functions ##
-def checkButtonPressed(app, button, mouseX, mouseY):
-    # Checks if the mouse was clicked in the button area
-    if (button.x - button.width / 2 <= mouseX <= 
-        button.x + button.width / 2) and (button.y - button.height / 2 
-        <= mouseY <= button.y + button.height / 2):
-        button.doCommand(app)
-
+# Checks which grid the player clicked, if any
 def checkGridPressed(app, mouseX, mouseY):
     # Checks if the mouse was clicked in the top grid area
     if (app.boardMargin <= mouseX <= app.boardMargin + app.boardSize) and (
@@ -66,6 +60,14 @@ def checkGridPressed(app, mouseX, mouseY):
         return True, False
     else:
         return False, 
+
+# Called after checking if a grid was clicked, checks if a button was clicked
+def checkButtonPressed(app, button, mouseX, mouseY):
+    # Checks if the mouse was clicked in the button area
+    if (button.x - button.width / 2 <= mouseX <= 
+        button.x + button.width / 2) and (button.y - button.height / 2 
+        <= mouseY <= button.y + button.height / 2):
+        button.doCommand(app)
 
 def checkForWin(app):
     if app.piecesLeft == 0:

@@ -6,6 +6,7 @@ class Computer(Player):
         super().__init__(app)
         self.pieceBoard.grid = randomizeBoard(app)
 
+    # Random guess
     def guess(self, app):
         row = random.randrange(0, app.size)
         col = random.randrange(0, app.size)
@@ -23,6 +24,7 @@ class Computer(Player):
         app.paused = True
         app.yourTurn = False
 
+    # Gets how many pieces the computer has hit / the player has left
     def getPiecesLeft(self, app):
             count = 0
             for row in range(app.size):
@@ -44,3 +46,14 @@ def randomizeBoard(app):
             col = random.randrange(0, app.size)
         grid[row][col] = True
     return grid
+
+# Recursive function to get a number of trains with corresponding car lengths
+def getTrainLengths(pieces, trainLenList):
+    newTrain = random.randrange(2, pieces)
+    trainLenList.append(newTrain)
+    if pieces == sum(trainLenList):
+        return trainLenList
+    if pieces - sum(trainLenList) < 2:
+        return getTrainLengths(pieces, trainLenList[0:-1])
+    else: 
+        return getTrainLengths(pieces, trainLenList)

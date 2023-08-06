@@ -3,14 +3,13 @@ from player import *
 from button import *
 from computer import *
 
-## Drawing the start screen ##
+# Drawing the start screen
 def drawStartScreen(app):
     drawLabel('BattleTrains', app.width / 2, app.boardMargin * 3, size = 79)
     for button in app.startButtonList:
         Button.drawButton(button, app)
 
-## Draw the game in progress screen ##
-
+# Draw the game in progress screen
 def drawGameScreen(app):
     if app.yourTurn:
         drawLabel('Your turn', app.width / 2, app.boardMargin * 2, size = 70)
@@ -22,7 +21,7 @@ def drawGameScreen(app):
     drawBoard(app, app.player.guessBoard.grid, atTop=True)
     for button in app.gameButtonList:
         Button.drawButton(button, app)
-    # Draw time elapsed
+    # Draw time elapsed sidebar label
     drawLabel('Time elapsed:', app.midX, 2 * app.boardMargin + 
               app.topTextHeight, size = 20)
     if (app.steps // 60) % 60 // 10 == 0:
@@ -31,14 +30,13 @@ def drawGameScreen(app):
     else:
         drawLabel(f'{app.steps // 60 // 60}:{app.steps // 60 % 60}', app.midX,
                   2 * app.boardMargin + app.topTextHeight + 50, size = 50)
-    # Draw pieces left
+    # Draw pieces left sidebar label
     drawLabel('Pieces left', app.midX, 6 * app.boardMargin + app.topTextHeight, 
               size = 20)
     drawLabel(app.piecesLeft, app.midX, 6 * app.boardMargin + app.topTextHeight 
               + 50, size = 50)
 
-
-## Draw the board creation screen ##
+# Draw the board creation screen
 def drawBoardCreation(app):
     drawLabel('Create your board', app.width / 2, app.boardMargin * 2, 
               size = 50)
@@ -56,13 +54,13 @@ def drawBoardCreation(app):
                         print("Gray")
                         button.color = 'gray'
         Button.drawButton(button, app)
-    # Draw pieces left
+    # Draw pieces left sidebar label
     drawLabel('Pieces left', app.midX, 6 * app.boardMargin + app.topTextHeight, 
               size = 20)
     drawLabel(app.pieces - app.player.piecesPlaced, app.midX, 6 * 
               app.boardMargin + app.topTextHeight + 50, size = 50)
 
-## Draw the board ##
+# Draw the board
 def drawBoard(app, grid, atTop):
     for row in range(app.size):
         for col in range(app.size):
