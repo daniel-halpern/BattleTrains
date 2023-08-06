@@ -46,10 +46,15 @@ def drawBoardCreation(app):
     drawBoard(app, app.player.pieceBoard.grid, atTop=False)
     for button in app.boardCreationButtonList:
         if button.command == 'start':
-            if app.player.piecesPlaced < app.pieces:
+            if (app.player.piecesPlaced < app.pieces or 
+                len(app.player.trainList) > app.maxTrains):
                 button.color = 'gray'
             else:
                 button.color = 'lime'
+                for train in app.player.trainList:
+                    if len(train.carList) < 2:
+                        print("Gray")
+                        button.color = 'gray'
         Button.drawButton(button, app)
     # Draw pieces left
     drawLabel('Pieces left', app.midX, 6 * app.boardMargin + app.topTextHeight, 
@@ -76,6 +81,9 @@ def drawBoard(app, grid, atTop):
 def drawCell(app, grid, row, col, atTop):
     cellLeft, cellTop, cellSize = getCellLeftTop(app, row, col, atTop)
     color = getColor(app, grid, row, col, atTop)
+    if color == 'red':
+        color = None
+        drawImage('trainSide.png', cellLeft, cellTop)
     drawRect(cellLeft, cellTop, cellSize, cellSize,
              fill=color, border='black',
              borderWidth=app.cellBorderWidth)

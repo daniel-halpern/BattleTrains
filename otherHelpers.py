@@ -5,6 +5,8 @@ from computer import *
 
 def restart(app):
     app.trainCars = 10
+    app.maxTrains = 5
+    app.minTrainLength = 2
     app.size = 8
     app.pieces = 10
     app.boardMargin = app.width / 16
@@ -23,6 +25,7 @@ def restart(app):
     app.sideGapWidth = app.width - 3 * app.boardMargin - app.boardSize
     app.midX = app.width - (app.sideGapWidth / 2) - app.boardMargin
     app.piecesLeft = app.pieces
+    app.sideUrl = 'cmu://2294/175459/trainSide.png'
     initializeButtons(app)
     
 def initializeButtons(app):

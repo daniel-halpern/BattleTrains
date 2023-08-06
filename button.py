@@ -23,5 +23,11 @@ class Button:
             print("instruct")
             app.screen = 'instructions'
         elif self.command == 'start':
-            if app.player.piecesPlaced == app.pieces:
+            # Only lets you start game if requirements are fufilled
+            if (app.player.piecesPlaced == app.pieces and 
+                len(app.player.trainList) <= app.maxTrains):
+                for train in app.player.trainList:
+                    # Returns if any car is shorter than 2 long
+                    if len(train.carList) < 2:
+                        return
                 app.screen = 'game'
