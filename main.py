@@ -65,8 +65,11 @@ def onKeyPress(app, key):
         app.player.piecesPlaced = piecesPlaced
     elif key == 's':
         app.showSolution = not app.showSolution
+    elif key == 'k':
+        app.computer.pieceBoard.grid = randomizeBoard(app)
 
 def redrawAll(app):
+    drawImage('grass.png', 0, 0)
     if app.screen == 'start':
         drawStartScreen(app)
     elif app.screen == 'boardCreation':

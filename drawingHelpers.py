@@ -62,18 +62,25 @@ def drawBoardCreation(app):
 
 # Draw the board
 def drawBoard(app, grid, atTop):
-    for row in range(app.size):
-        for col in range(app.size):
-            drawCell(app, grid, row, col, atTop)
-    # Draws the black border around the board to make it even
+    # Draws the black border around the board and the gray background
     if atTop == True:
+        drawRect(app.boardMargin, app.boardMargin + app.topTextHeight, 
+             app.boardSize, app.boardSize,
+            fill='black', opacity = 25)
         drawRect(app.boardMargin, app.boardMargin + app.topTextHeight, 
              app.boardSize, app.boardSize,
             fill=None, border='black', borderWidth=app.cellBorderWidth*2)
     else:
         drawRect(app.boardMargin, 2 * app.boardMargin + app.topTextHeight 
                  + app.boardSize, app.boardSize, app.boardSize,
+                fill='black', opacity = 25)
+        drawRect(app.boardMargin, 2 * app.boardMargin + app.topTextHeight 
+                 + app.boardSize, app.boardSize, app.boardSize,
                 fill=None, border='black', borderWidth=app.cellBorderWidth*2)
+    # Draws the indiviual cells
+    for row in range(app.size):
+        for col in range(app.size):
+            drawCell(app, grid, row, col, atTop)
 
 # Draws each indiviual cell
 def drawCell(app, grid, row, col, atTop):
@@ -82,9 +89,24 @@ def drawCell(app, grid, row, col, atTop):
     if color == 'red':
         color = None
         drawImage('trainSide.png', cellLeft, cellTop)
+    elif color == 'lime':
+        drawImage('trainSide.png', cellLeft, cellTop)
+        drawX(app, row, col, atTop, 'red')
+        color = None
+    elif color == 'blue':
+        color = None
+        drawX(app, row, col, atTop, 'blue')
+
     drawRect(cellLeft, cellTop, cellSize, cellSize,
              fill=color, border='black',
              borderWidth=app.cellBorderWidth)
+
+def drawX(app, row, col, atTop, color):
+    cellLeft, cellTop, cellSize = getCellLeftTop(app, row, col, atTop)
+    drawLine(cellLeft + 2, cellTop + 2, cellLeft + cellSize - 2, 
+             cellTop + cellSize - 2, fill = color, lineWidth = 5)
+    drawLine(cellLeft + 2, cellTop + cellSize - 2, cellLeft + cellSize - 2, 
+             cellTop + 2, fill = color, lineWidth = 5)
 
 # Gets what color that cell should be
 def getColor(app, grid, row, col, atTop):

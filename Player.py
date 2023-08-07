@@ -35,7 +35,7 @@ class Player:
                     for train in self.trainList:
                         for car in train.carList:
                             if car == (row, col):
-                                train.removeTrain((row, col))
+                                train.removeTrain(row, col)
             elif getSourroundingCarCount(self.pieceBoard.grid, row, col) == 1:
                 for train in self.trainList:
                     for car in train.carList:
@@ -84,19 +84,6 @@ class Player:
                 if self.pieceBoard.grid[row][col]:
                     count += 1
         return count
-    
-# Gets the count for how many surrounding cars
-def getSourroundingCarCount(grid, row, col):
-    count = 0
-    if 0 <= row - 1 < len(grid) and grid[row - 1][col]:
-        count += 1
-    if 0 <= col - 1 < len(grid) and grid[row][col - 1]:
-        count += 1
-    if 0 <= row + 1 < len(grid) and grid[row + 1][col]:
-        count += 1
-    if 0 <= col + 1 < len(grid) and grid[row][col + 1]:
-        count += 1
-    return count
             
 # Gets the grid row and column given an x and y coord 
 def getCell(app, x, y, atTop):
