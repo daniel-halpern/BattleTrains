@@ -57,21 +57,23 @@ def onMousePress(app, mouseX, mouseY):
         checkButtonPressed(app, app.backButton, mouseX, mouseY)
     # Win / Lose screen buttons
     elif app.screen == 'win':
-        print("1")
         for button in app.winLoseButtonList:
             checkButtonPressed(app, button, mouseX, mouseY)
 
 def onKeyPress(app, key):
     # Quick randomize board button
     if key == 'r' and app.screen == 'boardCreation':
-        app.player.pieceBoard.grid = randomizeBoard(app)
-        app.computer.pieceBoard.grid = randomizeBoard(app)
+        app.player.pieceBoard.grid, app.player.pieceBoardColors.grid = (
+            randomizeBoard(app))
+        app.computer.pieceBoard.grid, app.computer.pieceBoardColors.grid = (
+            randomizeBoard(app))
         piecesPlaced = Player.updatePiecesPlacedCount(app.player, app)
         app.player.piecesPlaced = piecesPlaced
     elif key == 's':
         app.showSolution = not app.showSolution
     elif key == 'k':
-        app.computer.pieceBoard.grid = randomizeBoard(app)
+        app.computer.pieceBoard.grid, app.computer.pieceBoardColors.grid = (
+            randomizeBoard(app))
 
 def redrawAll(app):
     # CITATION: I got this texture from

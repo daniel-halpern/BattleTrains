@@ -117,6 +117,7 @@ def drawBoardCreation(app):
 # CITATION: I based this function off of the drawBoard function from the Tetris 
 # project
 def drawBoard(app, grid, atTop):
+    turnTrainDictIntoGrid(app.player.trainList, grid, colorGrid)
     # Draws the black border around the board and the gray background
     if atTop == True:
         drawRect(app.boardMargin, app.boardMargin + app.topTextHeight, 
@@ -142,22 +143,33 @@ def drawBoard(app, grid, atTop):
 # Draws each indiviual cell
 def drawCell(app, grid, row, col, atTop):
     cellLeft, cellTop, cellSize = getCellLeftTop(app, row, col, atTop)
-    color = getColor(app, grid, row, col, atTop)
-    if color == 'red':
-        color = None
-        drawImage('trainSide.png', cellLeft, cellTop)
-    elif color == 'lime':
-        drawImage('trainSide.png', cellLeft, cellTop)
+    color, piece = getColor(app, grid, row, col, atTop)
+    if piece == 'train':
+        drawImageColored(app, color, cellLeft, cellTop)
+    elif piece == 'hit':
+        drawImageColored(app, color, cellLeft, cellTop)
         drawX(app, row, col, atTop, 'red')
-        color = None
-    elif color == 'blue':
-        color = None
+    elif piece == 'miss':
         drawX(app, row, col, atTop, 'blue')
-
     drawRect(cellLeft, cellTop, cellSize, cellSize,
-             fill=color, border='black',
+             fill=None, border='black',
              borderWidth=app.cellBorderWidth)
 
+def drawImageColored(app, color, x, y):
+    if color == 0:
+        drawImage('trainSide0.png', x, y)
+    elif color == 1:
+        drawImage('trainSide1.png', x, y)
+    elif color == 2:
+        drawImage('trainSide2.png', x, y)
+    elif color == 3:
+        drawImage('trainSide3.png', x, y)
+    elif color == 4:
+        drawImage('trainSide4.png', x, y)
+    else:
+        drawImage('trainSide.png', x, y)
+
+# Draws the red or blue hit / miss
 def drawX(app, row, col, atTop, color):
     cellLeft, cellTop, cellSize = getCellLeftTop(app, row, col, atTop)
     drawLine(cellLeft + 2, cellTop + 2, cellLeft + cellSize - 2, 
@@ -167,23 +179,27 @@ def drawX(app, row, col, atTop, color):
 
 # Gets what color that cell should be
 def getColor(app, grid, row, col, atTop):
+    color = None
     if atTop and app.showSolution and grid[row][col]:
-        color = 'red'
+        piece = 'train'
+        color = app.computer.pieceBoardColors.grid[row][col]
         if app.player.guessBoard.grid[row][col]:
-            color = 'lime'
+            piece = 'hit'
     elif atTop and grid[row][col] and app.player.guessBoard.grid[row][col]:
-        color = 'lime'
+        piece = 'hit'
+        color = app.computer.pieceBoardColors.grid[row][col]
     elif atTop == False and grid[row][col]:
-        color = 'red'
+        piece = 'train'
+        color = app.player.pieceBoardColors.grid[row][col]
         if app.computer.guessBoard.grid[row][col]:
-            color = 'lime'
+            piece = 'hit'
     else:
-        color = None
+        piece = None
         if atTop and app.player.guessBoard.grid[row][col] == False:
-            color = 'blue'
+            piece = 'miss'
         elif atTop == False and app.computer.guessBoard.grid[row][col] == False:
-            color = 'blue'
-    return color
+            piece = 'miss'
+    return color, piece
 
 # Gets the x and y position for each cell given a row and column
 # CITATION: I based this function off of the getCellLeftTop from the Tetris 

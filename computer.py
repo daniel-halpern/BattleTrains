@@ -1,11 +1,12 @@
 from player import *
 from board import *
 from time import *
+import random
 
 class Computer(Player):
     def __init__(self, app):
         super().__init__(app)
-        self.pieceBoard.grid = randomizeBoard(app)
+        self.pieceBoard.grid, self.pieceBoardColors.grid = randomizeBoard(app)
 
     # Relatively smart guess
     def guess(self, app):
@@ -15,13 +16,13 @@ class Computer(Player):
             row = random.randrange(0, app.size)
             col = random.randrange(0, app.size)
         if self.hitsExposed(app) != False:
-            print('hi', self.hitsExposed(app))
             row, col = self.hitsExposed(app)
         if app.player.pieceBoard.grid[row][col]:
             self.guessBoard.grid[row][col] = True
         else:
             self.guessBoard.grid[row][col] = False
 
+# Returns if, and if there is, where there is a not guessed piece next to a hit
     def hitsExposed(self, app):
         for row in range(app.size):
             for col in range(app.size):
@@ -55,26 +56,16 @@ class Computer(Player):
                         app.player.pieceBoard.grid[row][col]):
                         count += 1
             return count
-        
 
-# Randomly places the pieces for a user
-# def randomizeBoard(app):
-#     grid = [[None] * app.size for j in range(app.size)]
-#     for _ in range(app.pieces):
-#         row = random.randrange(0, app.size)
-#         col = random.randrange(0, app.size)
-#         while grid[row][col]:
-#             row = random.randrange(0, app.size)
-#             col = random.randrange(0, app.size)
-#         grid[row][col] = True
-#     return grid
-
+# Makes a new, randomized board
 def randomizeBoard(app):
-    grid = [[None] * (app.size) for j in range(app.size)] # TEMPORARY
+    grid = [[None] * (app.size) for j in range(app.size)] 
+    colorGrid = [[None] * (app.size) for j in range(app.size)] 
     trainDict = makeRandomTrainObjects(app)
-    fillTrainObjects(trainDict, app.size)
-    grid = turnTrainDictIntoGrid(trainDict, grid)
-    return grid
+    while fillTrainObjects(trainDict, app.size) == False:
+        pass
+    grid, colorGrid = turnTrainDictIntoGrid(trainDict, grid, colorGrid)
+    return grid, colorGrid
 
 # Recursive function to get a number of trains with corresponding car lengths
 def getTrainLengths(pieces, trainLenList):
@@ -103,21 +94,19 @@ def makeRandomTrainObjects(app):
     return trainDict
 
 # Checks if the positions of all the trains are legal
-def isTrainLegal(trainDict):
+def isTrainLegal(trainDict, size):
     seen = set()
     for train in trainDict:
         for car in train.carList:
             if car in seen:
                 return False
-            elif car[0] < 0 or car[0] >= 10 or car[1] < 0 or car[1] >= 10:
-                return False
-            #if getSourroundingFromPoint(car, train) == 4:
-            #    print("Too many surrounding cars", getSourroundingFromPoint(car, train))
-            #    return False                
+            elif car[0] < 0 or car[0] >= size or car[1] < 0 or car[1] >= size:
+                return False        
             else:
                 seen.add(car)
     return True
 
+# Counts how many surrounding cars there are to a point
 def getSourroundingFromPoint(car, train):
     count = 0
     for (dx, dy) in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
@@ -125,33 +114,46 @@ def getSourroundingFromPoint(car, train):
             count += 1
     return count
 
+# Given a dictionary of train objects and lengths, adds cars onto each train
+# object until each train reaches the desired length specified
 def fillTrainObjects(trainDict, size):
     directions = [(0, 1), (1,0), (0, -1), (-1, 0)]
     for train in trainDict:
-        dx, dy = directions[random.randrange(0, 4)]
+        initialDx, initialDy = directions[random.randrange(0, 4)]
+        iterations = 0
         while len(train.carList) < trainDict[train]:
-            for (dx, dy) in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
+            if iterations == 10:
+                return False
+            iterations += 1
+            # Weights going in the initial direction more
+            # CITATION: https://stackoverflow.com/questions/6824681/
+            if random.choice([True,True,True,True,True, False]):
+                x, y = train.carList[-1]
+                train.addTrain(x + initialDx, y + initialDy)
+                if isTrainLegal(trainDict, size) == False:
+                    train.removeTrain(x + initialDx, y + initialDy)
+                continue
+            pos = random.choice([(0, 1), (1, 0), (0, -1), (-1, 0)])
+            if len(train.carList) == trainDict[train]:
+                break
+            for x, y in reversed(train.carList):
                 if len(train.carList) == trainDict[train]:
                     break
-                for x, y in reversed(train.carList):
-                    if len(train.carList) == trainDict[train]:
-                        break
-                    if x + dx < 0 or x + dx >= size or y + dy < 0 or y + dy >= size:
-                        continue
-                    train.addTrain(x + dx, y + dy)
-                    if isTrainLegal(trainDict) == False:
-                        print('illegal')
-                        train.removeTrain(x + dx, y + dy)
-                        print('hi', x,y, x+dx, y+dy)
-                        print(train.carList)
-                        continue
-                    else:
-                        continue
+                if x + pos[0] < 0 or x + pos[0] >= size or y + pos[1] < 0 or y + pos[1] >= size:
+                    continue
+                train.addTrain(x + pos[0], y + pos[1])
+                if isTrainLegal(trainDict, size) == False:
+                    train.removeTrain(x + pos[0], y + pos[1])
+                    continue
 
-def turnTrainDictIntoGrid(trainDict, grid):
+# Takes the train dict and converts all the coordinate points of train cars
+# into actual points on the grid
+def turnTrainDictIntoGrid(trainDict, grid, colorGrid):
+    trainNum = 0
     for train in trainDict:
-        print(train.carList)
         for car in train.carList:
             grid[car[0]][car[1]] = True
-    return grid
+            colorGrid[car[0]][car[1]] = trainNum
+        trainNum += 1
+    return grid, colorGrid
 

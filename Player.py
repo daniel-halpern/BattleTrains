@@ -5,8 +5,9 @@ class Player:
     def __init__(self, app):
         self.pieces = app.pieces
         self.piecesPlaced = 0
-        self.guessBoard = board(app)
-        self.pieceBoard = board(app)
+        self.guessBoard = Board(app)
+        self.pieceBoard = Board(app)
+        self.pieceBoardColors = Board(app)
         self.trainList = []
     
     # Determines what happens if the top grid is pressed, no matter screen
@@ -37,21 +38,31 @@ class Player:
                             if car == (row, col):
                                 train.removeTrain(row, col)
             elif getSourroundingCarCount(self.pieceBoard.grid, row, col) == 1:
+                trainNum = 0
                 for train in self.trainList:
+                    firstRow, firstCol = train.carList[0]
+                    color = self.pieceBoardColors.grid[firstRow][firstCol]
                     for car in train.carList:
                         if 0 <= row - 1 < app.size and car == (row - 1, col):
                             train.addTrain(row, col)
+                            self.pieceBoardColors.grid[car[0]][car[1]] = color
                         elif 0 <= col - 1 < app.size and car == (row, col - 1):
                             train.addTrain(row, col)
+                            self.pieceBoardColors.grid[car[0]][car[1]] = color
                         elif 0 <= row + 1 < app.size and car == (row + 1, col):
                             train.addTrain(row, col)
+                            self.pieceBoardColors.grid[car[0]][car[1]] = color
                         elif 0 <= col + 1 < app.size and car == (row, col + 1):
                             train.addTrain(row, col)
+                            self.pieceBoardColors.grid[car[0]][car[1]] = color
+                    trainNum += 1
             elif getSourroundingCarCount(self.pieceBoard.grid, row, col) > 1:
                 print("Too many surrounding cars")
                 # Add an alert here saying how this violates the rules
             elif getSourroundingCarCount(self.pieceBoard.grid, row, col) == 0:
                 self.trainList.append(Train(app, row, col))
+                self.removeEmptyTrains()
+                self.pieceBoardColors.grid[row][col] = len(self.trainList)-1
             # Makes sure the player does not place too many pieces
             if getSourroundingCarCount(self.pieceBoard.grid, row, col) <= 1:
                 if self.piecesPlaced == app.pieces:
