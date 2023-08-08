@@ -111,7 +111,8 @@ def isTrainLegal(trainDict):
                 return False
             elif car[0] < 0 or car[0] >= 10 or car[1] < 0 or car[1] >= 10:
                 return False
-            #if getSourroundingFromPoint(car, train) == 2:
+            #if getSourroundingFromPoint(car, train) == 4:
+            #    print("Too many surrounding cars", getSourroundingFromPoint(car, train))
             #    return False                
             else:
                 seen.add(car)
@@ -139,7 +140,11 @@ def fillTrainObjects(trainDict, size):
                         continue
                     train.addTrain(x + dx, y + dy)
                     if isTrainLegal(trainDict) == False:
+                        print('illegal')
                         train.removeTrain(x + dx, y + dy)
+                        print('hi', x,y, x+dx, y+dy)
+                        print(train.carList)
+                        continue
                     else:
                         continue
 

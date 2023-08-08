@@ -51,6 +51,17 @@ def drawRulesScreen(app):
                size = 30)
     Button.drawButton(app.backButton, app)
 
+# Draw the win / lose screen
+def drawWinLoseScreen(app):
+    if app.screen == 'win':
+        drawLabel('You win!', app.width / 2, app.boardMargin * 2, size = 70)
+    else:
+        drawLabel('You lose!', app.width / 2, app.boardMargin * 2, size = 70)
+    drawBoard(app, app.computer.pieceBoard.grid, atTop=True)
+    drawBoard(app, app.player.pieceBoard.grid, atTop=False)
+    drawBoard(app, app.player.guessBoard.grid, atTop=True)
+    for button in app.winLoseButtonList:
+        Button.drawButton(button, app)
 
 # Draw the game in progress screen
 def drawGameScreen(app):

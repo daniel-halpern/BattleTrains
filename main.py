@@ -55,6 +55,11 @@ def onMousePress(app, mouseX, mouseY):
     # Instructions screen buttons
     elif app.screen == 'rules':
         checkButtonPressed(app, app.backButton, mouseX, mouseY)
+    # Win / Lose screen buttons
+    elif app.screen == 'win':
+        print("1")
+        for button in app.winLoseButtonList:
+            checkButtonPressed(app, button, mouseX, mouseY)
 
 def onKeyPress(app, key):
     # Quick randomize board button
@@ -85,6 +90,8 @@ def redrawAll(app):
         drawGameScreen(app)
     elif app.screen == 'rules':
         drawRulesScreen(app)
+    elif app.screen == 'win' or app.screen == 'lose':
+        drawWinLoseScreen(app)
         
 
 def main():

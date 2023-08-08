@@ -46,6 +46,10 @@ def initializeButtons(app):
     app.boardCreationButtonList = [startButton]
     # Game screen buttons
     app.gameButtonList = []
+    # Win / Lose screen buttons
+    restartButton = Button('Exit', app.midX, app.height / 2, 
+                         app.sideGapWidth, 60, 'lime', 'restart')
+    app.winLoseButtonList = [restartButton]
 
 ## Mouse press related functions ##
 # Checks which grid the player clicked, if any
@@ -69,12 +73,18 @@ def checkButtonPressed(app, button, mouseX, mouseY):
     if (button.x - button.width / 2 <= mouseX <= 
         button.x + button.width / 2) and (button.y - button.height / 2 
         <= mouseY <= button.y + button.height / 2):
-        button.doCommand(app)
+        if button.command != 'restart':
+            button.doCommand(app)
+        else:
+            restart(app)
 
 def checkForWin(app):
     if app.piecesLeft == 0:
-        print("you win")
-        restart(app)
+        app.screen = 'win'
+        app.showSolution = True
+        app.paused = False
     elif app.computer.getPiecesLeft(app) == app.pieces:
-        print("you lose")
-        restart(app)
+        app.screen = 'lose'
+        app.showSolution = True
+        app.paused = False
+
