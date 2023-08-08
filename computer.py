@@ -21,7 +21,6 @@ class Computer(Player):
             self.guessBoard.grid[row][col] = True
         else:
             self.guessBoard.grid[row][col] = False
-        print(self.hitsExposed(app))
 
     def hitsExposed(self, app):
         for row in range(app.size):
@@ -73,7 +72,7 @@ class Computer(Player):
 def randomizeBoard(app):
     grid = [[None] * (app.size) for j in range(app.size)] # TEMPORARY
     trainDict = makeRandomTrainObjects(app)
-    fillTrainObjects(trainDict)
+    fillTrainObjects(trainDict, app.size)
     grid = turnTrainDictIntoGrid(trainDict, grid)
     return grid
 
@@ -112,8 +111,8 @@ def isTrainLegal(trainDict):
                 return False
             elif car[0] < 0 or car[0] >= 10 or car[1] < 0 or car[1] >= 10:
                 return False
-            if getSourroundingFromPoint(car, train) > 2:
-                return False                
+            #if getSourroundingFromPoint(car, train) == 2:
+            #    return False                
             else:
                 seen.add(car)
     return True
@@ -125,24 +124,24 @@ def getSourroundingFromPoint(car, train):
             count += 1
     return count
 
-def fillTrainObjects(trainDict):
-    directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
-    newTrainDict = dict()
+def fillTrainObjects(trainDict, size):
+    directions = [(0, 1), (1,0), (0, -1), (-1, 0)]
     for train in trainDict:
-        for _ in range(trainDict[train]):
-            for x, y in reversed(train.carList):
+        dx, dy = directions[random.randrange(0, 4)]
+        while len(train.carList) < trainDict[train]:
+            for (dx, dy) in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
                 if len(train.carList) == trainDict[train]:
-                    continue
-                for (dx, dy) in directions:
-                    train.addTrain(x + dx, y + dy)
+                    break
+                for x, y in reversed(train.carList):
                     if len(train.carList) == trainDict[train]:
                         break
+                    if x + dx < 0 or x + dx >= size or y + dy < 0 or y + dy >= size:
+                        continue
+                    train.addTrain(x + dx, y + dy)
                     if isTrainLegal(trainDict) == False:
                         train.removeTrain(x + dx, y + dy)
-                    #else:
-                    #    continue
-        print(train.carList)
-        print(trainDict[train])
+                    else:
+                        continue
 
 def turnTrainDictIntoGrid(trainDict, grid):
     for train in trainDict:
