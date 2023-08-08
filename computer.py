@@ -7,17 +7,39 @@ class Computer(Player):
         super().__init__(app)
         self.pieceBoard.grid = randomizeBoard(app)
 
-    # Random guess
+    # Relatively smart guess
     def guess(self, app):
         row = random.randrange(0, app.size)
         col = random.randrange(0, app.size)
         while self.guessBoard.grid[row][col] != None:
             row = random.randrange(0, app.size)
             col = random.randrange(0, app.size)
+        if self.hitsExposed(app) != False:
+            print('hi', self.hitsExposed(app))
+            row, col = self.hitsExposed(app)
         if app.player.pieceBoard.grid[row][col]:
             self.guessBoard.grid[row][col] = True
         else:
             self.guessBoard.grid[row][col] = False
+        print(self.hitsExposed(app))
+
+    def hitsExposed(self, app):
+        for row in range(app.size):
+            for col in range(app.size):
+                if self.guessBoard.grid[row][col]:
+                    if (0 <= row - 1 < app.size and 
+                        self.guessBoard.grid[row - 1][col] == None):
+                        return row - 1, col
+                    elif (0 <= col - 1 < app.size and 
+                          self.guessBoard.grid[row][col - 1] == None):
+                        return row, col - 1
+                    elif (0 <= row + 1 < app.size and 
+                            self.guessBoard.grid[row + 1][col] == None):
+                        return row + 1, col
+                    elif (0 <= col + 1 < app.size and
+                            self.guessBoard.grid[row][col + 1] == None):
+                        return row, col + 1
+        return False
 
     def computerMakeMove(self, app):
         # Adds a delay between player's guess and computer's guess
@@ -55,12 +77,6 @@ def randomizeBoard(app):
     grid = turnTrainDictIntoGrid(trainDict, grid)
     return grid
 
-# def randomizeBoard(app):
-#     while computerAddPiece(app.computer, app, random.randrange(0, app.size), 
-#                                         random.randrange(0, app.size)):
-#         pass
-
-
 # Recursive function to get a number of trains with corresponding car lengths
 def getTrainLengths(pieces, trainLenList):
     newTrain = random.randrange(2, pieces)
@@ -87,15 +103,27 @@ def makeRandomTrainObjects(app):
         trainDict[Train(app, row, col)] = trainLengths[i]
     return trainDict
 
+# Checks if the positions of all the trains are legal
 def isTrainLegal(trainDict):
     seen = set()
     for train in trainDict:
         for car in train.carList:
             if car in seen:
                 return False
+            elif car[0] < 0 or car[0] >= 10 or car[1] < 0 or car[1] >= 10:
+                return False
+            if getSourroundingFromPoint(car, train) > 2:
+                return False                
             else:
                 seen.add(car)
     return True
+
+def getSourroundingFromPoint(car, train):
+    count = 0
+    for (dx, dy) in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
+        if (car[0] + dx, car[1] + dy) in train.carList:
+            count += 1
+    return count
 
 def fillTrainObjects(trainDict):
     directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
@@ -111,11 +139,14 @@ def fillTrainObjects(trainDict):
                         break
                     if isTrainLegal(trainDict) == False:
                         train.removeTrain(x + dx, y + dy)
-                    else:
-                        continue
+                    #else:
+                    #    continue
+        print(train.carList)
+        print(trainDict[train])
 
 def turnTrainDictIntoGrid(trainDict, grid):
     for train in trainDict:
+        print(train.carList)
         for car in train.carList:
             grid[car[0]][car[1]] = True
     return grid

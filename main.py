@@ -52,9 +52,9 @@ def onMousePress(app, mouseX, mouseY):
         else: # Otherwise checks if the mouse was clicked in a button area
             for button in app.boardCreationButtonList:
                 checkButtonPressed(app, button, mouseX, mouseY)
-
-def onMouseRelease(app, mouseX, mouseY):
-    pass
+    # Instructions screen buttons
+    elif app.screen == 'rules':
+        checkButtonPressed(app, app.backButton, mouseX, mouseY)
 
 def onKeyPress(app, key):
     # Quick randomize board button
@@ -69,6 +69,13 @@ def onKeyPress(app, key):
         app.computer.pieceBoard.grid = randomizeBoard(app)
 
 def redrawAll(app):
+    # CITATION: I got this texture from
+    """
+    <a href="https://www.freepik.com/free-photo/abstract-bright-green-square-
+    pixel-tile-mosaic-wall-background-texture_18487439.htm#query=pixel%20texture
+    %20grass&position=1&from_view=keyword&track=ais">Image by benzoix</a> on 
+    Freepik 
+    """
     drawImage('grass.png', 0, 0)
     if app.screen == 'start':
         drawStartScreen(app)
@@ -76,10 +83,9 @@ def redrawAll(app):
         drawBoardCreation(app)
     elif app.screen == 'game':
         drawGameScreen(app)
-    elif app.screen == 'settings':
-        pass
-    elif app.screen == 'instructions':
-        pass
+    elif app.screen == 'rules':
+        drawRulesScreen(app)
+        
 
 def main():
     runApp(500, 800)

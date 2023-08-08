@@ -30,14 +30,16 @@ def restart(app):
 # Makes all the button objects
 def initializeButtons(app):
     # Start screen buttons
-    playButton = Button('Play', app.width / 2, app.height / 4, app.width / 2, 
-                        app.height / 10, 'lime', 'play')
-    settingsButton = Button('Settings', app.width / 2, 3 * app.height / 8, 
-                            app.width / 2, app.height / 10, 'gray', 'settings')
-    instructionsButton = Button('Instructions', app.width / 2, app.height / 2, 
-                                app.width / 2, app.height / 10, 'gray', 
-                                'instructions')
-    app.startButtonList = [playButton, settingsButton, instructionsButton]
+    playButton = Button('Play', app.width / 2,  7 * app.height / 16, 
+                        app.width / 2, app.height / 10, 'lime', 'play')
+    instructionsButton = Button('Instructions', app.width / 2, 
+                                9 * app.height / 16, app.width / 2, 
+                                app.height / 10, 'gray', 'instructions')
+    app.startButtonList = [playButton, instructionsButton]
+    # Rules buttons
+    app.backButton = Button('Back', app.width / 2, 
+                                7 * app.height / 8, app.width / 2, 
+                                app.height / 10, 'lime', 'back')
     # Board creation screen buttons
     startButton = Button('Start', app.midX, app.height / 2, 
                          app.sideGapWidth, 60, 'lime', 'start')

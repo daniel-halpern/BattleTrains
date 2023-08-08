@@ -6,8 +6,51 @@ from computer import *
 # Drawing the start screen
 def drawStartScreen(app):
     drawLabel('BattleTrains', app.width / 2, app.boardMargin * 3, size = 79)
+    drawLabel('Welcome to BattleTrains!', app.width / 2, app.boardMargin * 5, 
+               size = 30)
+    drawLabel('Try and destroy all the', app.width / 2, app.boardMargin * 6, 
+               size = 30)
+    drawLabel("opponent's train cars", app.width / 2, app.boardMargin * 7, 
+               size = 30)
+    drawLabel("before they get yours!", app.width / 2, app.boardMargin * 8, 
+               size = 30)
     for button in app.startButtonList:
         Button.drawButton(button, app)
+
+# Drawing the rules screen
+def drawRulesScreen(app):
+    topDist = app.boardMargin
+    drawLabel('The Rules:', app.width / 2, app.boardMargin * 3, size = 79)
+    drawLabel('During set up, you must place', app.width / 2, topDist * 5, 
+               size = 30)
+    drawLabel('down 10 pieces, known as train', app.width / 2, topDist * 6, 
+               size = 30)
+    drawLabel('cars, on the bottom grid.', app.width / 2, topDist * 7, 
+               size = 30)
+    drawLabel('When you place down a train car', app.width / 2, topDist * 9, 
+               size = 30)
+    drawLabel('that is not connected to any', app.width / 2, topDist * 10, 
+               size = 30)
+    drawLabel('other train car, it becomes a', app.width / 2, topDist * 11, 
+               size = 30)
+    drawLabel('train.', app.width / 2, topDist * 12, 
+               size = 30)
+    drawLabel('In order for a board to be legal,', app.width / 2, topDist * 14, 
+               size = 30)
+    drawLabel('it must not have more than 5', app.width / 2, topDist * 15, 
+               size = 30)
+    drawLabel('trains, with each of these trains', app.width / 2, topDist * 16, 
+               size = 30)
+    drawLabel('being longer than 2 cars and', app.width / 2, topDist * 17, 
+               size = 30)
+    drawLabel('no train car can touch another', app.width / 2, topDist * 18, 
+               size = 30)
+    drawLabel('train car that isnt a subsequent', app.width / 2, topDist * 19, 
+               size = 30)
+    drawLabel('part of that train.', app.width / 2, topDist * 20, 
+               size = 30)
+    Button.drawButton(app.backButton, app)
+
 
 # Draw the game in progress screen
 def drawGameScreen(app):
@@ -51,7 +94,6 @@ def drawBoardCreation(app):
                 button.color = 'lime'
                 for train in app.player.trainList:
                     if len(train.carList) < 2:
-                        print("Gray")
                         button.color = 'gray'
         Button.drawButton(button, app)
     # Draw pieces left sidebar label
@@ -61,6 +103,8 @@ def drawBoardCreation(app):
               app.boardMargin + app.topTextHeight + 50, size = 50)
 
 # Draw the board
+# CITATION: I based this function off of the drawBoard function from the Tetris 
+# project
 def drawBoard(app, grid, atTop):
     # Draws the black border around the board and the gray background
     if atTop == True:
@@ -82,6 +126,8 @@ def drawBoard(app, grid, atTop):
         for col in range(app.size):
             drawCell(app, grid, row, col, atTop)
 
+# CITATION: I based this function off of the drawCell function from the Tetris 
+# project
 # Draws each indiviual cell
 def drawCell(app, grid, row, col, atTop):
     cellLeft, cellTop, cellSize = getCellLeftTop(app, row, col, atTop)
@@ -129,6 +175,8 @@ def getColor(app, grid, row, col, atTop):
     return color
 
 # Gets the x and y position for each cell given a row and column
+# CITATION: I based this function off of the getCellLeftTop from the Tetris 
+# project
 def getCellLeftTop(app, row, col, atTop):
     cellSize = app.boardSize / app.size
     if atTop:

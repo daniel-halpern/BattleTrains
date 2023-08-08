@@ -17,10 +17,7 @@ class Button:
     def doCommand(self, app):
         if self.command == 'play':
             app.screen = 'boardCreation'
-        elif self.command == 'settings':
-            app.screen = 'settings'
         elif self.command == 'instructions':
-            print("instruct")
             app.screen = 'instructions'
         elif self.command == 'start':
             # Only lets you start game if requirements are fufilled
@@ -31,3 +28,5 @@ class Button:
                     if len(train.carList) < 2:
                         return
                 app.screen = 'game'
+        elif self.command == 'back':
+            app.screen = 'start'
