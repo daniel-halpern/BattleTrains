@@ -32,9 +32,9 @@ def initializeButtons(app):
     # Start screen buttons
     playButton = Button('Play', app.width / 2,  7 * app.height / 16, 
                         app.width / 2, app.height / 10, 'lime', 'play')
-    instructionsButton = Button('Instructions', app.width / 2, 
+    instructionsButton = Button('The Rules', app.width / 2, 
                                 9 * app.height / 16, app.width / 2, 
-                                app.height / 10, 'gray', 'instructions')
+                                app.height / 10, 'gray', 'rules')
     app.startButtonList = [playButton, instructionsButton]
     # Rules buttons
     app.backButton = Button('Back', app.width / 2, 

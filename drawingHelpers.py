@@ -113,11 +113,19 @@ def drawBoardCreation(app):
     drawLabel(app.pieces - app.player.piecesPlaced, app.midX, 6 * 
               app.boardMargin + app.topTextHeight + 50, size = 50)
 
+def turnTrainListIntoGrid(trainList, grid, colorGrid):
+    trainNum = 0
+    for train in trainList:
+        for car in train.carList:
+            grid[car[0]][car[1]] = True
+            colorGrid.grid[car[0]][car[1]] = trainNum
+        trainNum += 1
+    return grid, colorGrid
+
 # Draw the board
 # CITATION: I based this function off of the drawBoard function from the Tetris 
 # project
 def drawBoard(app, grid, atTop):
-    turnTrainDictIntoGrid(app.player.trainList, grid, colorGrid)
     # Draws the black border around the board and the gray background
     if atTop == True:
         drawRect(app.boardMargin, app.boardMargin + app.topTextHeight, 
@@ -127,6 +135,8 @@ def drawBoard(app, grid, atTop):
              app.boardSize, app.boardSize,
             fill=None, border='black', borderWidth=app.cellBorderWidth*2)
     else:
+        turnTrainListIntoGrid(app.player.trainList, grid, 
+                              app.player.pieceBoardColors)
         drawRect(app.boardMargin, 2 * app.boardMargin + app.topTextHeight 
                  + app.boardSize, app.boardSize, app.boardSize,
                 fill='black', opacity = 25)
@@ -145,9 +155,9 @@ def drawCell(app, grid, row, col, atTop):
     cellLeft, cellTop, cellSize = getCellLeftTop(app, row, col, atTop)
     color, piece = getColor(app, grid, row, col, atTop)
     if piece == 'train':
-        drawImageColored(app, color, cellLeft, cellTop)
+        drawImageColored(app, color, cellLeft, cellTop, atTop)
     elif piece == 'hit':
-        drawImageColored(app, color, cellLeft, cellTop)
+        drawImageColored(app, color, cellLeft, cellTop, atTop)
         drawX(app, row, col, atTop, 'red')
     elif piece == 'miss':
         drawX(app, row, col, atTop, 'blue')
@@ -155,7 +165,11 @@ def drawCell(app, grid, row, col, atTop):
              fill=None, border='black',
              borderWidth=app.cellBorderWidth)
 
-def drawImageColored(app, color, x, y):
+def drawImageColored(app, color, x, y, atTop):
+    if not atTop:
+        for train in app.player.trainList:
+            if (x,y) in train.carList:
+                color = train.color
     if color == 0:
         drawImage('trainSide0.png', x, y)
     elif color == 1:

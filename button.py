@@ -17,8 +17,8 @@ class Button:
     def doCommand(self, app):
         if self.command == 'play':
             app.screen = 'boardCreation'
-        elif self.command == 'instructions':
-            app.screen = 'instructions'
+        elif self.command == 'rules':
+            app.screen = 'rules'
         elif self.command == 'start':
             # Only lets you start game if requirements are fufilled
             if (app.player.piecesPlaced == app.pieces and 

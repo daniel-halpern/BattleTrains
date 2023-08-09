@@ -63,6 +63,7 @@ def onMousePress(app, mouseX, mouseY):
 def onKeyPress(app, key):
     # Quick randomize board button
     if key == 'r' and app.screen == 'boardCreation':
+        app.player.trainList = []
         app.player.pieceBoard.grid, app.player.pieceBoardColors.grid = (
             randomizeBoard(app))
         app.computer.pieceBoard.grid, app.computer.pieceBoardColors.grid = (

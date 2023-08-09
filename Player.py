@@ -25,19 +25,21 @@ class Player:
                 print("MISS")
                 app.computer.computerMakeMove(app)
                 self.guessBoard.grid[row][col] = False
-
+                
     # Determines what happens if the bottom grid is pressed, no matter screen
     def bottomBoardPressed(self, app, x, y, atTop):
         if app.screen == 'boardCreation':
             row, col = getCell(app, x, y, atTop)
-            # If there is already a train car in this position
+            # If the box pressed has a train car on it
             if self.pieceBoard.grid[row][col]:
                 if getSourroundingCarCount(self.pieceBoard.grid, row, col) < 2:
                     for train in self.trainList:
                         for car in train.carList:
                             if car == (row, col):
                                 train.removeTrain(row, col)
-            elif getSourroundingCarCount(self.pieceBoard.grid, row, col) == 1:
+            # Else, if there is a single surrounding train car, add to train
+            elif (getSourroundingCarCount(self.pieceBoard.grid, row, col) == 1 
+                    and self.checkNumTrainCars() < app.pieces):
                 trainNum = 0
                 for train in self.trainList:
                     firstRow, firstCol = train.carList[0]
@@ -59,8 +61,14 @@ class Player:
             elif getSourroundingCarCount(self.pieceBoard.grid, row, col) > 1:
                 print("Too many surrounding cars")
                 # Add an alert here saying how this violates the rules
-            elif getSourroundingCarCount(self.pieceBoard.grid, row, col) == 0:
-                self.trainList.append(Train(app, row, col))
+            # Else, if there are no surrounding train cars, make a new train
+            elif (getSourroundingCarCount(self.pieceBoard.grid, row, col) == 0 
+                  and self.piecesPlaced < app.pieces):
+                colorSet = set()
+                for train in self.trainList:
+                    colorSet.add(train.color)
+                color = min(set(range(0,10)) - colorSet)
+                self.trainList.append(Train(app, row, col, color))
                 self.removeEmptyTrains()
                 self.pieceBoardColors.grid[row][col] = len(self.trainList)-1
             # Makes sure the player does not place too many pieces
@@ -87,13 +95,21 @@ class Player:
             else:
                 i += 1
     
-    # Updates how the count of how many pieces were placed
+    # Updates how the count of how many pieces were placed on the grid
     def updatePiecesPlacedCount(self, app):
         count = 0
         for row in range(app.size):
             for col in range(app.size):
                 if self.pieceBoard.grid[row][col]:
                     count += 1
+        return count
+    
+    # Checks how many train cars are in the trainList
+    def checkNumTrainCars(self):
+        count = 0
+        for train in self.trainList:
+            for car in train.carList:
+                count += 1
         return count
             
 # Gets the grid row and column given an x and y coord 

@@ -1,5 +1,6 @@
 class Train():
-    def __init__(self, app, row, col):
+    def __init__(self, app, row, col, color):
+        self.color = color
         self.carList = [(row, col)]
 
     def addTrain(self, row, col):

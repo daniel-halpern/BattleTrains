@@ -90,7 +90,7 @@ def makeRandomTrainObjects(app):
             while abs(car[0] - row) < 2 or abs(car[1] - col) < 2:
                 row = random.randrange(0, app.size-1)
                 col = random.randrange(0, app.size-1)
-        trainDict[Train(app, row, col)] = trainLengths[i]
+        trainDict[Train(app, row, col, len(trainDict))] = trainLengths[i]
     return trainDict
 
 # Checks if the positions of all the trains are legal
@@ -139,7 +139,8 @@ def fillTrainObjects(trainDict, size):
             for x, y in reversed(train.carList):
                 if len(train.carList) == trainDict[train]:
                     break
-                if x + pos[0] < 0 or x + pos[0] >= size or y + pos[1] < 0 or y + pos[1] >= size:
+                if (x + pos[0] < 0 or x + pos[0] >= size or y + pos[1] < 0 
+                    or y + pos[1] >= size):
                     continue
                 train.addTrain(x + pos[0], y + pos[1])
                 if isTrainLegal(trainDict, size) == False:
