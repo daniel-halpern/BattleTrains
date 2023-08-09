@@ -56,7 +56,7 @@ def onMousePress(app, mouseX, mouseY):
     elif app.screen == 'rules':
         checkButtonPressed(app, app.backButton, mouseX, mouseY)
     # Win / Lose screen buttons
-    elif app.screen == 'win':
+    elif app.screen == 'win' or app.screen == 'lose':
         for button in app.winLoseButtonList:
             checkButtonPressed(app, button, mouseX, mouseY)
 

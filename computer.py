@@ -62,8 +62,9 @@ def randomizeBoard(app):
     grid = [[None] * (app.size) for j in range(app.size)] 
     colorGrid = [[None] * (app.size) for j in range(app.size)] 
     trainDict = makeRandomTrainObjects(app)
+    # Prevents the program softlocking if it cannot find a legal solution
     while fillTrainObjects(trainDict, app.size) == False:
-        pass
+        trainDict = makeRandomTrainObjects(app)
     grid, colorGrid = turnTrainDictIntoGrid(trainDict, grid, colorGrid)
     return grid, colorGrid
 
@@ -101,8 +102,18 @@ def isTrainLegal(trainDict, size):
             if car in seen:
                 return False
             elif car[0] < 0 or car[0] >= size or car[1] < 0 or car[1] >= size:
-                return False        
+                return False 
             else:
+                # Makes sure two trains aren't touching
+                for train2 in trainDict:
+                    if train2 != train:
+                        for car2 in train2.carList:
+                            if (car2 == (car[0] + 1, car[1]) or
+                                car2 == (car[0], car[1] + 1) or
+                                car2 == (car[0] - 1, car[1]) or
+                                car2 == (car[0], car[1] + 1)): 
+                                return False
+                # If all these cases are passed, add the car
                 seen.add(car)
     return True
 
@@ -127,7 +138,7 @@ def fillTrainObjects(trainDict, size):
             iterations += 1
             # Weights going in the initial direction more
             # CITATION: https://stackoverflow.com/questions/6824681/
-            if random.choice([True,True,True,True,True, False]):
+            if random.choice([True, True, True, True, True, False]):
                 x, y = train.carList[-1]
                 train.addTrain(x + initialDx, y + initialDy)
                 if isTrainLegal(trainDict, size) == False:
