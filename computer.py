@@ -6,7 +6,8 @@ import random
 class Computer(Player):
     def __init__(self, app):
         super().__init__(app)
-        self.pieceBoard.grid, self.pieceBoardColors.grid = randomizeBoard(app)
+        self.pieceBoard.grid, self.pieceBoardColors.grid, self.trainDict = (
+                                                        randomizeBoard(app))
 
     # Relatively smart guess
     def guess(self, app):
@@ -66,7 +67,7 @@ def randomizeBoard(app):
     while fillTrainObjects(trainDict, app.size) == False:
         trainDict = makeRandomTrainObjects(app)
     grid, colorGrid = turnTrainDictIntoGrid(trainDict, grid, colorGrid)
-    return grid, colorGrid
+    return grid, colorGrid, trainDict
 
 # Recursive function to get a number of trains with corresponding car lengths
 def getTrainLengths(pieces, trainLenList):

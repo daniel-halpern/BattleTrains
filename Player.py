@@ -21,6 +21,8 @@ class Player:
                 app.piecesLeft -= 1
                 self.guessBoard.grid[row][col] = True
                 app.computer.computerMakeMove(app)
+                if checkTrainDestroyed(self, app.computer.trainDict):
+                    print("Destroyed")
             else:
                 print("MISS")
                 app.computer.computerMakeMove(app)
@@ -122,3 +124,38 @@ def getCell(app, x, y, atTop):
     col = int((x - gridLeft) / cellSize)
     return row,col
 
+# Checks if the player/computer (self) has destroyed a train in trainList
+def checkTrainDestroyed(self, trainList):
+    # Standardizes both possible type inputs (dicts and lists) to one
+    if isinstance(trainList, dict):
+        trainList = list(trainList.keys())
+    # Checks if trainList even has a train that was destroyed
+    for train in trainList:
+        if not train.wasDestroyed:
+            for car in train.carList:
+                # If a single car is not destroyed, the train is not destroyed
+                if self.guessBoard.grid[car[0]][car[1]] != True:
+                    break
+            # If all cars are destroyed, the train is destroyed
+            else: # Seizing the opportunity to use a for-else loop
+                train.wasDestroyed = True
+                guessAroundTrain(self, train)
+                return True
+    return False
+
+# Sets all the guessGrid tiles around a destroyed train to misses
+def guessAroundTrain(self, train):
+    for car in train.carList:
+        size = len(self.guessBoard.grid)
+        if (0 <= car[0] + 1 < size and 
+            self.guessBoard.grid[car[0] + 1][car[1]] == None):
+            self.guessBoard.grid[car[0] + 1][car[1]] = False
+        if (0 <= car[0] - 1 < size and 
+            self.guessBoard.grid[car[0] - 1][car[1]] == None):
+            self.guessBoard.grid[car[0] - 1][car[1]] = False
+        if (0 <= car[1] + 1 < size and 
+            self.guessBoard.grid[car[0]][car[1] + 1] == None):
+            self.guessBoard.grid[car[0]][car[1] + 1] = False
+        if (0 <= car[1] + 1 < size and 
+            self.guessBoard.grid[car[0]][car[1] - 1] == None):
+            self.guessBoard.grid[car[0]][car[1] - 1] = False

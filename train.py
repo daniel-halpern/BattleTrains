@@ -2,6 +2,7 @@ class Train():
     def __init__(self, app, row, col, color):
         self.color = color
         self.carList = [(row, col)]
+        self.wasDestroyed = False
 
     def addTrain(self, row, col):
         self.carList.append((row, col))

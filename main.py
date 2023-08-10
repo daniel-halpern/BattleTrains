@@ -14,6 +14,8 @@ def onStep(app):
         # Adds a delay between player's guess and computer's guess
         if app.steps == app.unPauseTime and app.paused:
             app.computer.guess(app)
+            if checkTrainDestroyed(app.computer, app.player.trainList):
+                print("Destroyed")
             app.paused = False
             app.yourTurn = True
 
@@ -63,18 +65,17 @@ def onMousePress(app, mouseX, mouseY):
 def onKeyPress(app, key):
     # Quick randomize board button
     if key == 'r' and app.screen == 'boardCreation':
-        app.player.trainList = []
-        app.player.pieceBoard.grid, app.player.pieceBoardColors.grid = (
+        app.player.pieceBoard.grid, app.player.pieceBoardColors.grid, dict = (
             randomizeBoard(app))
-        app.computer.pieceBoard.grid, app.computer.pieceBoardColors.grid = (
-            randomizeBoard(app))
+    # CITATION: 
+    # https://www.tutorialspoint.com/How-to-convert-Python-Dictionary-to-a-list
+        app.player.trainList = list(dict.keys())
+        (app.computer.pieceBoard.grid, app.computer.pieceBoardColors.grid, 
+         app.computer.trainDict) = randomizeBoard(app)
         piecesPlaced = Player.updatePiecesPlacedCount(app.player, app)
         app.player.piecesPlaced = piecesPlaced
     elif key == 's':
         app.showSolution = not app.showSolution
-    elif key == 'k':
-        app.computer.pieceBoard.grid, app.computer.pieceBoardColors.grid = (
-            randomizeBoard(app))
 
 def redrawAll(app):
     # CITATION: I got this texture from
