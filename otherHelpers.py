@@ -99,6 +99,8 @@ def checkForWin(app):
         app.screen = 'win'
         app.showSolution = True
         app.paused = False
+        if app.previousBestSteps == None or app.steps < app.previousBestSteps:
+            app.previousBestSteps = app.steps
     elif app.computer.getPiecesLeft(app) == app.pieces:
         app.screen = 'lose'
         app.showSolution = True

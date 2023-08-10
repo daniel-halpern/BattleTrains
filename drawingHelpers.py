@@ -14,6 +14,19 @@ def drawStartScreen(app):
                size = 30)
     drawLabel("before they get yours!", app.width / 2, app.boardMargin * 8, 
                size = 30)
+    drawLabel("Personal best time:", app.width / 2, app.boardMargin * 18, 
+               size = 30)
+    drawLabel("Personal best time:", app.width / 2, app.boardMargin * 18, 
+               size = 30)
+    pb = app.previousBestSteps
+    if pb == None:
+        drawLabel('None', app.width / 2, app.boardMargin * 19, size = 30)
+    elif (pb // 60) % 60 // 10 == 0:
+        drawLabel(f'{pb // 60 // 60}:0{pb // 60 % 60}', app.width / 2, 
+                  app.boardMargin * 19, size = 30)
+    else:
+        drawLabel(f'{pb // 60 // 60}:{pb // 60 % 60}', app.width / 2, 
+                  app.boardMargin * 19, size = 30)
     for button in app.startButtonList:
         Button.drawButton(button, app)
 
@@ -57,6 +70,15 @@ def drawWinLoseScreen(app):
         drawLabel('You win!', app.width / 2, app.boardMargin * 2, size = 70)
     else:
         drawLabel('You lose!', app.width / 2, app.boardMargin * 2, size = 70)
+    # Draw time taken sidebar label
+    drawLabel('Game time:', app.midX, 2 * app.boardMargin + 
+              app.topTextHeight, size = 20)
+    if (app.steps // 60) % 60 // 10 == 0:
+        drawLabel(f'{app.steps // 60 // 60}:0{app.steps // 60 % 60}', app.midX,
+                  2 * app.boardMargin + app.topTextHeight + 50, size = 50)
+    else:
+        drawLabel(f'{app.steps // 60 // 60}:{app.steps // 60 % 60}', app.midX,
+                  2 * app.boardMargin + app.topTextHeight + 50, size = 50)
     drawBoard(app, app.computer.pieceBoard.grid, atTop=True)
     drawBoard(app, app.player.pieceBoard.grid, atTop=False)
     drawBoard(app, app.player.guessBoard.grid, atTop=True)

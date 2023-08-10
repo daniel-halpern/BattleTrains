@@ -6,6 +6,7 @@ from computer import *
 
 def onAppStart(app):
     restart(app)
+    app.previousBestSteps = None
 
 def onStep(app):
     checkForWin(app)
@@ -94,7 +95,6 @@ def redrawAll(app):
         drawRulesScreen(app)
     elif app.screen == 'win' or app.screen == 'lose':
         drawWinLoseScreen(app)
-        
 
 def main():
     runApp(500, 800)
