@@ -30,7 +30,6 @@ def onMousePress(app, mouseX, mouseY):
     elif app.screen == 'boardCreation':
         # Checks if the mouse was clicked in grid area
         if checkGridPressed(app, mouseX, mouseY)[0]:
-            # Checks if the player has enough pieces left to place a piece
             if app.player.piecesPlaced <= app.pieces:
                 # Checks which grid (top or bottom) was clicked
                 if checkGridPressed(app, mouseX, mouseY)[1]:
@@ -44,7 +43,6 @@ def onMousePress(app, mouseX, mouseY):
     elif app.screen == 'game':
         # Checks if the mouse was clicked in grid area
         if checkGridPressed(app, mouseX, mouseY)[0]:
-            # Checks if the player has enough pieces left to place a piece
             if app.player.piecesPlaced <= app.pieces:
                 # Checks which grid (top or bottom) was clicked
                 if checkGridPressed(app, mouseX, mouseY)[1]:
@@ -67,7 +65,7 @@ def onKeyPress(app, key):
     if key == 'r' and app.screen == 'boardCreation':
         app.player.pieceBoard.grid, app.player.pieceBoardColors.grid, dict = (
             randomizeBoard(app))
-    # CITATION: 
+    # CITATION: I got the code for converting a dictionary to a list from
     # https://www.tutorialspoint.com/How-to-convert-Python-Dictionary-to-a-list
         app.player.trainList = list(dict.keys())
         (app.computer.pieceBoard.grid, app.computer.pieceBoardColors.grid, 

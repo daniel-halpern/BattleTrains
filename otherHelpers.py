@@ -3,6 +3,7 @@ from player import *
 from button import *
 from computer import *
 
+# Called when the game starts or when the player wants to restart
 def restart(app):
     app.trainCars = 10
     app.maxTrains = 5
@@ -78,6 +79,7 @@ def checkButtonPressed(app, button, mouseX, mouseY):
         else:
             restart(app)
 
+# Checks if either the player or computer has won
 def checkForWin(app):
     if app.piecesLeft == 0:
         app.screen = 'win'

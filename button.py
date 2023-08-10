@@ -8,12 +8,12 @@ class Button:
         self.height = height
         self.color = color
         self.command = command
-
+    # Draws the button
     def drawButton(self, app):
         drawRect(self.x, self.y, self.width, self.height, 
                  fill=self.color, border='black', align = 'center')
         drawLabel(self.text, self.x, self.y, size = self.height/2)
-        
+    # Performs the command that occurs when a button is pressed
     def doCommand(self, app):
         if self.command == 'play':
             app.screen = 'boardCreation'

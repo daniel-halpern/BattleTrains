@@ -42,6 +42,8 @@ class Computer(Player):
                         return row, col + 1
         return False
 
+    # Gives the computer a delay before making a move to give the player a 
+    # shred of hope
     def computerMakeMove(self, app):
         # Adds a delay between player's guess and computer's guess
         app.unPauseTime = app.steps + random.randrange(25, 50)

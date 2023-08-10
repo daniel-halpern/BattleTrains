@@ -113,6 +113,7 @@ def drawBoardCreation(app):
     drawLabel(app.pieces - app.player.piecesPlaced, app.midX, 6 * 
               app.boardMargin + app.topTextHeight + 50, size = 50)
 
+# Takes a list of trains and places them on a grid
 def turnTrainListIntoGrid(trainList, grid, colorGrid):
     trainNum = 0
     for train in trainList:
