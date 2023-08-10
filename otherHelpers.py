@@ -36,6 +36,8 @@ def restart(app):
     app.sideGapWidth = app.width - 3 * app.boardMargin - app.boardSize
     app.midX = app.width - (app.sideGapWidth / 2) - app.boardMargin
     app.piecesLeft = app.pieces
+    app.destroyed = False
+    app.playerDestroyed = False
     # CITATION: Whistle from https://www.youtube.com/watch?v=fHpytok7TRA
     app.horn = loadSound('TrainWhistle.mp3')
     # CITATION: Explosion sound from https://www.youtube.com/watch?v=9FMquJzgDGQ

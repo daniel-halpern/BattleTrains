@@ -14,18 +14,18 @@ class Player:
     def topBoardPressed(self, app, x, y, atTop):
         if app.screen == 'game':
             row, col = getCell(app, x, y, atTop)
+            app.playerDestroyed = False
             if app.player.guessBoard.grid[row][col] != None:
-                print("already guessed there")
+                print("Try again! You already guessed there.")
             elif app.computer.pieceBoard.grid[row][col]:
-                print("HIT")
                 app.smallExplosion.play()
                 app.piecesLeft -= 1
                 self.guessBoard.grid[row][col] = True
                 app.computer.computerMakeMove(app)
                 if checkTrainDestroyed(self, app.computer.trainDict):
-                    print("Destroyed")
+                    app.destroyed = True
+                    app.playerDestroyed = True
             else:
-                print("MISS")
                 app.computer.computerMakeMove(app)
                 self.guessBoard.grid[row][col] = False
                 

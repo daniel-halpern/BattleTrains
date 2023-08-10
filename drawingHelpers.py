@@ -84,6 +84,14 @@ def drawWinLoseScreen(app):
     drawBoard(app, app.player.guessBoard.grid, atTop=True)
     for button in app.winLoseButtonList:
         Button.drawButton(button, app)
+# Draws the message that a train was destroyed
+def drawTrainDestroyed(app):
+    drawRect(app.midX - app.sideGapWidth / 2 - 4, app.height / 2 - 4, app.sideGapWidth + 8, 68, fill = 'black')
+    drawRect(app.midX - app.sideGapWidth / 2, app.height / 2, app.sideGapWidth, 60, fill = 'red')
+    drawLabel('Train', app.midX, 10 * app.boardMargin + 
+            app.topTextHeight, size = 20)
+    drawLabel('Destroyed!', app.midX, 11 * app.boardMargin + 
+            app.topTextHeight, size = 20)
 
 # Draw the game in progress screen
 def drawGameScreen(app):

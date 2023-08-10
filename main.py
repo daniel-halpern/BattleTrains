@@ -16,7 +16,10 @@ def onStep(app):
         if app.steps == app.unPauseTime and app.paused:
             app.computer.guess(app)
             if checkTrainDestroyed(app.computer, app.player.trainList):
+                app.destroyed = True
                 print("Destroyed")
+            else:
+                app.destroyed = False
             app.paused = False
             app.yourTurn = True
 
@@ -91,6 +94,9 @@ def redrawAll(app):
         drawBoardCreation(app)
     elif app.screen == 'game':
         drawGameScreen(app)
+        # Draws the message saying a train was destroyed
+        if app.destroyed or app.playerDestroyed:
+            drawTrainDestroyed(app)
     elif app.screen == 'rules':
         drawRulesScreen(app)
     elif app.screen == 'win' or app.screen == 'lose':
