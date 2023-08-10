@@ -16,6 +16,7 @@ class Button:
     # Performs the command that occurs when a button is pressed
     def doCommand(self, app):
         if self.command == 'play':
+            app.horn.play()
             app.screen = 'boardCreation'
         elif self.command == 'rules':
             app.screen = 'rules'

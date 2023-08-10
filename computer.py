@@ -20,6 +20,7 @@ class Computer(Player):
             row, col = self.hitsExposed(app)
         if app.player.pieceBoard.grid[row][col]:
             self.guessBoard.grid[row][col] = True
+            app.smallExplosion.play()
         else:
             self.guessBoard.grid[row][col] = False
 

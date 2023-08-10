@@ -18,6 +18,7 @@ class Player:
                 print("already guessed there")
             elif app.computer.pieceBoard.grid[row][col]:
                 print("HIT")
+                app.smallExplosion.play()
                 app.piecesLeft -= 1
                 self.guessBoard.grid[row][col] = True
                 app.computer.computerMakeMove(app)

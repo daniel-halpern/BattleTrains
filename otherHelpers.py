@@ -2,6 +2,16 @@ from cmu_graphics import *
 from player import *
 from button import *
 from computer import *
+import os, pathlib # For the sound stuff
+
+# CITATION: Shawn's soundtest.py code
+def loadSound(relativePath):
+    # Convert to absolute path (because pathlib.Path only takes absolute paths)
+    absolutePath = os.path.abspath(relativePath)
+    # Get local file URL
+    url = pathlib.Path(absolutePath).as_uri()
+    # Load Sound file from local URL
+    return Sound(url)
 
 # Called when the game starts or when the player wants to restart
 def restart(app):
@@ -26,6 +36,10 @@ def restart(app):
     app.sideGapWidth = app.width - 3 * app.boardMargin - app.boardSize
     app.midX = app.width - (app.sideGapWidth / 2) - app.boardMargin
     app.piecesLeft = app.pieces
+    # CITATION: Whistle from https://www.youtube.com/watch?v=fHpytok7TRA
+    app.horn = loadSound('TrainWhistle.mp3')
+    # CITATION: Explosion sound from https://www.youtube.com/watch?v=9FMquJzgDGQ
+    app.smallExplosion = loadSound('smallExplosion.mp3')
     initializeButtons(app)
 
 # Makes all the button objects

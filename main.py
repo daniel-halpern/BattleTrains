@@ -11,7 +11,7 @@ def onStep(app):
     checkForWin(app)
     if app.screen == 'game':
         app.steps += 1
-        # Adds a delay between player's guess and computer's guess
+        # Adds a delay between player's guess and compxuter's guess
         if app.steps == app.unPauseTime and app.paused:
             app.computer.guess(app)
             if checkTrainDestroyed(app.computer, app.player.trainList):
